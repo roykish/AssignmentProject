@@ -1,7 +1,6 @@
 import model.Order;
 import service.OrderService;
 import util.PriceUtil;
-import util.TableBuilder;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -47,7 +46,6 @@ public class CafeOrderManagement {
         scanner.close(); // Close scanner to prevent resource leak
     }
 
-    // Method to handle placing an order
     // Method to handle placing an order
     private static void placeOrder(Scanner scanner) {
         int tableNumber;
@@ -114,9 +112,8 @@ public class CafeOrderManagement {
     }
 
 
+    //function to display invoice.
     private static void displayInvoice() {
-        TableBuilder tableBuilder = new TableBuilder();
-
         // Iterate through orders
         for (int i = 0; i < OrderService.getOrderCount(); i++) {
             Order order = OrderService.getOrder(i);
@@ -128,13 +125,12 @@ public class CafeOrderManagement {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("d-MMM-yyyy");
             String formattedDate = currentDate.format(formatter);
 
-            tableBuilder.addRow("Order# " + orderNumber, "Table# " + tableNumber,
-                    "Date: " + formattedDate, "Staff: " + staff);
+            // Print order information
+            System.out.printf("Order# %d%56sTable# %d%n", orderNumber, "", tableNumber);
+            System.out.printf("Date: %-15s%45sStaff: %s%n", formattedDate, "", staff);
+            System.out.println("Item#      Name                              Qty      Price       Sub-total");
 
             double totalAmount = 0;
-
-            // Add labels for item details
-            tableBuilder.addRow("Item#", "Item Name", "Qty", "Price", "Sub-total");
 
             // Add item details
             int itemCount = order.getItemCount();
@@ -146,30 +142,29 @@ public class CafeOrderManagement {
                 double subtotal = price * quantity;
                 totalAmount += subtotal;
 
-                // Add item details to the table
-                tableBuilder.addRow(String.valueOf(itemNumber), itemName, String.valueOf(quantity),
-                        String.format("%.2f", price), String.format("%.2f", subtotal));
+                // Print item details with aligned formatting
+                System.out.printf("%-10d%-35s%-9d%-12.2f%-9.2f%n", itemNumber, itemName, quantity, price, subtotal);
             }
 
             // Calculate VAT and net amount for the current order
             double vatAmount = totalAmount * VAT_RATE / (1 + VAT_RATE);
             double netAmount = totalAmount - vatAmount;
 
-            // Add total, VAT, and net amount to the invoice for the current order
-            tableBuilder.addRow("", "", "Total", "", String.format("%.2f", totalAmount));
-            tableBuilder.addRow("", "", "VAT (" + (VAT_RATE * 100) + "%)", "", String.format("%.2f", vatAmount));
-            tableBuilder.addRow("", "", "Net amount", "", String.format("%.2f", netAmount));
+            // Print total, VAT, and net amount for the current order
+            System.out.printf("%54sTotal%11.2f%n", "", totalAmount);
+            System.out.printf("%54sVAT (%.0f%%)%7.2f%n", "", VAT_RATE * 100, vatAmount);
+            System.out.printf("%54sNet Amount %8.2f%n", "", netAmount);
 
-            // Add box separator between orders
+            // Add a separator between orders
             if (i != OrderService.getOrderCount() - 1) {
-                tableBuilder.addRow("----------------------------------------------------------------------");
+                System.out.println("---------------------------------------------------------------------");
             }
         }
-
-        // Display the invoice
-        System.out.println(tableBuilder.toString());
     }
 
+
+
+    //Function for numeric input validation
     private static int nextIntSafe(Scanner scanner) {
         int number;
         while (true) {

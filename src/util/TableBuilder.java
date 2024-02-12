@@ -1,45 +1,26 @@
 package util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class TableBuilder {
-    private List<String[]> rows = new ArrayList<>();
 
-    public void addRow(String... cols) {
-        rows.add(cols);
-    }
+    private static final String HORIZONTAL_LINE = "---------------------------------------------------";
 
-    private int[] colWidths() {
-        int cols = -1;
+    public static String buildTable(String[] headers, String[][] data) {
+        StringBuilder table = new StringBuilder();
 
-        for (String[] row : rows)
-            cols = Math.max(cols, row.length);
+        // Add headers
+        for (String header : headers) {
+            table.append(String.format("%-20s", header)).append(" | ");
+        }
+        table.append("\n").append(HORIZONTAL_LINE).append("\n");
 
-        int[] widths = new int[cols];
-
-        for (String[] row : rows) {
-            for (int colNum = 0; colNum < row.length; colNum++) {
-                widths[colNum] = Math.max(widths[colNum], row[colNum].length());
+        // Add data rows
+        for (String[] row : data) {
+            for (String col : row) {
+                table.append(String.format("%-20s", col)).append(" | ");
             }
+            table.append("\n");
         }
 
-        return widths;
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder buf = new StringBuilder();
-
-        int[] colWidths = colWidths();
-
-        for (String[] row : rows) {
-            for (int colNum = 0; colNum < row.length; colNum++) {
-                buf.append(String.format("%-" + colWidths[colNum] + "s  ", row[colNum]));
-            }
-            buf.append("\n");
-        }
-
-        return buf.toString();
+        return table.toString();
     }
 }

@@ -4,6 +4,7 @@ public class PriceUtil {
 
 
 
+    //This function will take the item number and see the price of that item
     public static double getIndividualItemPrice(int itemNumber) {
         switch (itemNumber) {
             case 11:
@@ -100,6 +101,7 @@ public class PriceUtil {
     }
 
 
+    //This function is for calculating item price.
     public static double getItemPrice(int itemNumber, int quantity) {
         switch (itemNumber) {
             case 11:
@@ -195,6 +197,7 @@ public class PriceUtil {
         }
     }
 
+    //This function is for getting the item name.
     public static String getItemName(int itemNumber) {
         switch (itemNumber) {
             case 11:
