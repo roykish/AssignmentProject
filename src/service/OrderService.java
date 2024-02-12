@@ -19,7 +19,9 @@ public class OrderService {
     public static double getTotalAmount() {
         double totalAmount = 0;
         for (int i = 0; i < orderCount; i++) {
-            totalAmount += orders[i].getPrice() * orders[i].getQuantity();
+            for (int j = 0; j < orders[i].getItemCount(); j++) {
+                totalAmount += orders[i].getItemPrice(j) * orders[i].getItemQuantity(j);
+            }
         }
         return totalAmount;
     }
@@ -35,5 +37,13 @@ public class OrderService {
             return null;
         }
     }
-}
 
+    public static Order getLastOrderForTable(int tableNumber) {
+        for (int i = orderCount - 1; i >= 0; i--) {
+            if (orders[i].getTableNumber() == tableNumber) {
+                return orders[i];
+            }
+        }
+        return null;
+    }
+}

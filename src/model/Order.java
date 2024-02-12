@@ -3,57 +3,48 @@ package model;
 public class Order {
     private int orderNumber;
     private int tableNumber;
-    private int itemNumber;
-    private int quantity;
-    private double price;
+    private int[] itemNumbers;
+    private int[] quantities;
+    private double[] prices;
+    private int itemCount;
 
-    public Order(int orderNumber, int tableNumber, int itemNumber, int quantity, double price) {
+    public Order(int orderNumber, int tableNumber) {
         this.orderNumber = orderNumber;
         this.tableNumber = tableNumber;
-        this.itemNumber = itemNumber;
-        this.quantity = quantity;
-        this.price = price;
+        this.itemNumbers = new int[100]; // Initial capacity
+        this.quantities = new int[100]; // Initial capacity
+        this.prices = new double[100]; // Initial capacity
+        this.itemCount = 0;
     }
 
-    // Getters and setters
+    public void addItem(int itemNumber, int quantity, double price) {
+        itemNumbers[itemCount] = itemNumber;
+        quantities[itemCount] = quantity;
+        prices[itemCount] = price;
+        itemCount++;
+    }
+
     public int getOrderNumber() {
         return orderNumber;
-    }
-
-    public void setOrderNumber(int orderNumber) {
-        this.orderNumber = orderNumber;
     }
 
     public int getTableNumber() {
         return tableNumber;
     }
 
-    public void setTableNumber(int tableNumber) {
-        this.tableNumber = tableNumber;
+    public int getItemCount() {
+        return itemCount;
     }
 
-    public int getItemNumber() {
-        return itemNumber;
+    public int getItemNumber(int index) {
+        return itemNumbers[index];
     }
 
-    public void setItemNumber(int itemNumber) {
-        this.itemNumber = itemNumber;
+    public int getItemQuantity(int index) {
+        return quantities[index];
     }
 
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public double getItemPrice(int index) {
+        return prices[index];
     }
 }
-
